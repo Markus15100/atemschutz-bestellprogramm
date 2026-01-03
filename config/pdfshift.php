@@ -1,0 +1,2 @@
+<?php
+define('PDFSHIFT_API_KEY', 'DEIN_PDFSHIFT_API_KEY_HIER');
