@@ -7,6 +7,7 @@ $stmt = $pdo->query("
     SELECT a.*, k.name AS kategorie
     FROM artikel a
     JOIN kategorien k ON a.kategorie_id = k.id
+    WHERE a.aktiv = 1
     ORDER BY a.name
 ");
 $artikel = $stmt->fetchAll();
