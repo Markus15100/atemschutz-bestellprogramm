@@ -39,18 +39,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Bild optional ersetzen
         $bildname = $artikel['bild'];
+        $uploadDir = "../assets/uploads/artikel/";
+
         if (!empty($_FILES['bild']['name'])) {
             $ext = strtolower(pathinfo($_FILES['bild']['name'], PATHINFO_EXTENSION));
             $erlaubt = ['jpg', 'jpeg', 'png', 'webp'];
 
             if (in_array($ext, $erlaubt)) {
-                if (!empty($artikel['bild']) && file_exists("../assets/images/" . $artikel['bild'])) {
-                    unlink("../assets/images/" . $artikel['bild']);
+
+                // altes Bild löschen
+                if (!empty($artikel['bild']) && file_exists($uploadDir . $artikel['bild'])) {
+                    unlink($uploadDir . $artikel['bild']);
                 }
+
+                // neues Bild speichern
                 $bildname = uniqid('artikel_') . '.' . $ext;
                 move_uploaded_file(
                     $_FILES['bild']['tmp_name'],
-                    "../assets/images/" . $bildname
+                    $uploadDir . $bildname
                 );
             } else {
                 $fehler = "Nur JPG, PNG oder WEBP erlaubt.";

@@ -68,7 +68,7 @@ $artikel = $stmt->fetchAll();
                     <td><?= (int)$a['ve_groesse'] ?> Stk / VE</td>
                     <td class="text-center">
                         <?php if(!empty($a['bild'])): ?>
-                            <img src="../assets/images/<?= htmlspecialchars($a['bild']) ?>"
+                            <img src="../assets/uploads/artikel/?= htmlspecialchars($a['bild']) ?>"
                                  width="60" class="img-thumbnail">
                         <?php else: ?>
                             <span class="text-muted">–</span>
