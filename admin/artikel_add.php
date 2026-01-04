@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="mb-3">
             <label class="form-label">Preis (€) *</label>
-            <input type="number" step="0.01" name="preis" class="form-control" required>
+            <input type="number" step="0.01" min="0" name="preis" class="form-control">
         </div>
 
         <div class="mb-3">

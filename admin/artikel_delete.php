@@ -2,14 +2,50 @@
 require "../config/auth.php";
 require "../config/db.php";
 
-// Artikel inkl. Kategorie laden
-$stmt = $pdo->query("
-    SELECT a.*, k.name AS kategorie
-    FROM artikel a
-    JOIN kategorien k ON a.kategorie_id = k.id
-    ORDER BY a.name
+/*
+ * artikel_delete.php
+ * ------------------
+ * KEIN echtes Löschen!
+ * Artikel werden nur deaktiviert (Soft-Delete),
+ * damit bestehende Bestellungen korrekt bleiben.
+ */
+
+$id = (int)($_GET['id'] ?? 0);
+
+if ($id <= 0) {
+    die("Ungültige Artikel-ID");
+}
+
+/* Artikel prüfen */
+$stmt = $pdo->prepare("
+    SELECT id, name, aktiv
+    FROM artikel
+    WHERE id = ?
 ");
-$artikel = $stmt->fetchAll();
+$stmt->execute([$id]);
+$artikel = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$artikel) {
+    die("Artikel nicht gefunden");
+}
+
+/* Falls Artikel bereits inaktiv ist → einfach zurück */
+if ((int)$artikel['aktiv'] === 0) {
+    header("Location: artikel.php");
+    exit;
+}
+
+/* Artikel deaktivieren */
+$stmt = $pdo->prepare("
+    UPDATE artikel
+    SET aktiv = 0
+    WHERE id = ?
+");
+$stmt->execute([$id]);
+
+/* Zurück zur Artikelübersicht */
+header("Location: artikel.php");
+exit;
 ?>
 <!DOCTYPE html>
 <html lang="de">
