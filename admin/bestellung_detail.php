@@ -13,8 +13,9 @@ if (!$bestellung) die("Bestellung nicht gefunden");
 
 /* Artikelliste für Dropdown */
 $artikelListe = $pdo->query("
-    SELECT id, artikelnummer, name, preis, ve_groesse
+    SELECT id, artikelnummer, name, preis, ve_groesse, bild
     FROM artikel
+    WHERE aktiv = 1
     ORDER BY name
 ")->fetchAll();
 
@@ -113,14 +114,27 @@ $stmt->execute([$gesamt, $id]);
 
                         <div class="col-md-6">
                             <label class="form-label">Artikel</label>
-                            <select name="artikel_id" class="form-select" required>
+                            <select name="artikel_id"
+                                id="artikelSelect"
+                                class="form-select"
+                                required>
                                 <option value="">Bitte wählen</option>
+
                                 <?php foreach ($artikelListe as $a): ?>
-                                    <option value="<?= $a['id'] ?>">
+                                    <option value="<?= $a['id'] ?>"
+                                        data-bild="<?= htmlspecialchars($a['bild'] ?? '') ?>">
                                         <?= htmlspecialchars($a['artikelnummer'] . " – " . $a['name']) ?>
                                     </option>
                                 <?php endforeach; ?>
+
                             </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Vorschau</label><br>
+                            <img id="artikelPreview"
+                                class="img-thumbnail"
+                                style="max-height:120px; display:none;">
                         </div>
 
                         <div class="col-md-3">
@@ -209,3 +223,23 @@ $stmt->execute([$gesamt, $id]);
 </body>
 
 </html>
+
+<script>
+    const select = document.getElementById('artikelSelect');
+    const preview = document.getElementById('artikelPreview');
+
+    if (select) {
+        select.addEventListener('change', function() {
+            const opt = this.options[this.selectedIndex];
+            const bild = opt.getAttribute('data-bild');
+
+            if (bild && bild !== '') {
+                preview.src = '../assets/uploads/artikel/' + bild;
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+                preview.src = '';
+            }
+        });
+    }
+</script>
