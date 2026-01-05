@@ -182,7 +182,7 @@ if (isset($_GET['deaktivieren']) && $_GET['deaktivieren'] == 1) {
             <div class="mb-3">
                 <label class="form-label">Artikelbild (optional)</label><br>
                 <?php if (!empty($artikel['bild'])): ?>
-                    <img src="../assets/images/<?= htmlspecialchars($artikel['bild']) ?>" width="100" class="img-thumbnail mb-2">
+                    <img src="../assets/uploads/artikel/<?= htmlspecialchars($artikel['bild']) ?>" width="100" class="img-thumbnail mb-2">
                 <?php endif; ?>
                 <input type="file" name="bild" class="form-control">
             </div>
