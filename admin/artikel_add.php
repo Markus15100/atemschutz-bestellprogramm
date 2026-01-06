@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ve_groesse          = (int)($_POST['ve_groesse'] ?? 1);
 
     // Grundvalidierung
-    if (!$kategorie_id || !$artikelnummer || !$name || $preis <= 0) {
+    if (!$kategorie_id || !$artikelnummer || !$name || $preis < 0) {
         $fehler = "Bitte alle Pflichtfelder korrekt ausfüllen.";
     } else {
 
