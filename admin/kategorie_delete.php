@@ -1,27 +1,28 @@
 <?php
-require __DIR__ . "/../config/auth.php";
-require __DIR__ . "/../config/db.php";
+require "../config/auth.php";
+require "../config/db.php";
 
-$id = $_GET["id"] ?? null;
-if (!$id) {
+$id = (int)($_GET['id'] ?? 0);
+if ($id <= 0) {
     header("Location: kategorien.php");
     exit;
 }
 
-// Prüfen ob Artikel existieren
-$stmt = $pdo->prepare("SELECT COUNT(*) FROM artikel WHERE kategorie_id = ?");
-$stmt->execute([$id]);
-$anzahl = $stmt->fetchColumn();
-
-if ($anzahl > 0) {
-    // nicht löschen – zurück
-    header("Location: kategorien.php?error=verwendet");
-    exit;
-}
-
-// Löschen
-$stmt = $pdo->prepare("DELETE FROM kategorien WHERE id = ?");
+/* Kategorie deaktivieren */
+$stmt = $pdo->prepare("
+    UPDATE kategorien
+    SET aktiv = 0
+    WHERE id = ?
+");
 $stmt->execute([$id]);
 
-header("Location: kategorien.php");
+/* Optional: alle Artikel dieser Kategorie ebenfalls deaktivieren */
+$stmt = $pdo->prepare("
+    UPDATE artikel
+    SET aktiv = 0
+    WHERE kategorie_id = ?
+");
+$stmt->execute([$id]);
+
+header("Location: kategorien.php?msg=deaktiviert");
 exit;
