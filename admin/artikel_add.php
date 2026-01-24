@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $bildname = uniqid('artikel_') . '.' . $ext;
                 move_uploaded_file(
                     $_FILES['bild']['tmp_name'],
-                    "../assets/images/" . $bildname
+                    "../assets/uploads/artikel/" . $bildname
                 );
             } else {
                 $fehler = "Nur JPG, PNG oder WEBP erlaubt.";
